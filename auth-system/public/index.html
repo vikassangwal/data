@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevForge Secure Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- AUTHENTICATION CONTAINER (LOGIN / REGISTER) -->
+  <div class="auth-container" id="auth-panel">
+    <h2 id="panel-title">Sign In</h2>
+    <p class="subtitle" id="panel-subtitle">Access your premium DevForge dashboard</p>
+
+    <!-- Error & Success Banners -->
+    <div class="error-message" id="error-banner"></div>
+    <div class="success-message" id="success-banner"></div>
+
+    <form id="auth-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="name@company.com">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-primary" id="submit-btn">Continue</button>
+    </form>
+
+    <p class="toggle-text" id="toggle-p">
+      New here? <span onclick="toggleMode()">Create an account</span>
+    </p>
+  </div>
+
+  <!-- PROTECTED DASHBOARD PANEL (HIDDEN BY DEFAULT) -->
+  <div class="auth-container dashboard-card" id="dashboard-panel">
+    <h2>Secure Dashboard</h2>
+    <p class="subtitle">Access Level: <span class="welcome-header" id="user-display">user@domain.com</span></p>
+
+    <div class="dashboard-data" id="dashboard-secrets">
+      Connecting to encrypted database nodes...
+    </div>
+
+    <button onclick="logout()" class="btn-secondary">Terminate Session (Logout)</button>
+  </div>
+
+  <script>
+    let isLoginMode = true;
+    const API_BASE = '/api';
+
+    // UI Nodes
+    const authPanel = document.getElementById('auth-panel');
+    const dashboardPanel = document.getElementById('dashboard-panel');
+    const authForm = document.getElementById('auth-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submit-btn');
+    const panelTitle = document.getElementById('panel-title');
+    const panelSubtitle = document.getElementById('panel-subtitle');
+    const toggleP = document.getElementById('toggle-p');
+    const errorBanner = document.getElementById('error-banner');
+    const successBanner = document.getElementById('success-banner');
+    const userDisplay = document.getElementById('user-display');
+    const dashboardSecrets = document.getElementById('dashboard-secrets');
+
+    // On Load: Check if User already holds a valid JWT token
+    window.addEventListener('DOMContentLoaded', () => {
+      checkAuthentication();
+    });
+
+    // Toggle between Login & Register panels
+    function toggleMode() {
+      isLoginMode = !isLoginMode;
+      errorBanner.style.display = 'none';
+      successBanner.style.display = 'none';
+      authForm.reset();
+
+      if (isLoginMode) {
+        panelTitle.innerText = 'Sign In';
+        panelSubtitle.innerText = 'Access your premium DevForge dashboard';
+        submitBtn.innerText = 'Continue';
+        toggleP.innerHTML = 'New here? <span onclick="toggleMode()">Create an account</span>';
+      } else {
+        panelTitle.innerText = 'Create Account';
+        panelSubtitle.innerText = 'Set up a secure DevForge profile';
+        submitBtn.innerText = 'Register';
+        toggleP.innerHTML = 'Already registered? <span onclick="toggleMode()">Sign In</span>';
+      }
+    }
+
+    // Handles form submission (Login vs Registration API request)
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+      successBanner.style.display = 'none';
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const endpoint = isLoginMode ? '/login' : '/register';
+
+      try {
+        const response = await fetch(`${API_BASE}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Server request failed.');
+        }
+
+        if (isLoginMode) {
+          // 1. Save JWT securely to Local Storage
+          localStorage.setItem('df_token', data.token);
+          localStorage.setItem('df_email', data.email);
+          
+          // 2. Clear inputs and refresh view state
+          authForm.reset();
+          checkAuthentication();
+        } else {
+          // Show Registration success banner and toggle back to Login form
+          successBanner.innerText = 'Registration complete! You may now sign in.';
+          successBanner.style.display = 'block';
+          toggleMode();
+        }
+      } catch (err) {
+        errorBanner.innerText = err.message;
+        errorBanner.style.display = 'block';
+      }
+    });
+
+    // Protected Route Gatekeeper verification
+    async function checkAuthentication() {
+      const token = localStorage.getItem('df_token');
+      const email = localStorage.getItem('df_email');
+
+      if (token && email) {
+        // Hide Login form, reveal Dashboard
+        authPanel.style.display = 'none';
+        dashboardPanel.style.display = 'block';
+        userDisplay.innerText = email;
+        dashboardSecrets.innerText = 'Fetching sensitive database layers...';
+
+        try {
+          // Fetch server data sending JWT in authorization header
+          const response = await fetch(`${API_BASE}/dashboard`, {
+            method: 'GET',
+            headers: { 
+              'Authorization': `Bearer ${token}` 
+            }
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error);
+          }
+
+          dashboardSecrets.innerHTML = `
+            <strong>Decryption Key:</strong> OK<br>
+            <strong>JWT User Metadata:</strong> ID #${data.user.id}<br>
+            <strong>Secure Node Message:</strong><br>
+            <span style="color: #34d399;">"${data.secretData}"</span>
+          `;
+        } catch (err) {
+          // If token has expired or altered, trigger automatic logout
+          logout();
+        }
+      } else {
+        // Show Login panel, hide Dashboard
+        authPanel.style.display = 'block';
+        dashboardPanel.style.display = 'none';
+      }
+    }
+
+    // Secure Logout: Purge tokens and reload UI
+    function logout() {
+      localStorage.removeItem('df_token');
+      localStorage.removeItem('df_email');
+      checkAuthentication();
+    }
+  </script>
+</body>
+</html>

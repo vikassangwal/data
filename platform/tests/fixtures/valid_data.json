@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Widget A",
+    "sales": 1520,
+    "region": "North"
+  },
+  {
+    "id": 2,
+    "name": "Widget B",
+    "sales": 2340,
+    "region": "South"
+  },
+  {
+    "id": 3,
+    "name": "Widget C",
+    "sales": 890,
+    "region": "East"
+  }
+]

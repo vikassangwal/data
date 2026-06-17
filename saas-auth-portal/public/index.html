@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevForge SaaS Auth & BI cockpit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================= AUTHENTICATION COCKPIT (LOGIN / REGISTER / RECOVERY) ================= -->
+  <div class="auth-container" id="auth-panel">
+    <div class="header-logo">
+      <div class="logo-circle">✨</div>
+      <h2>DevForge Portal</h2>
+    </div>
+    <p class="subtitle" id="panel-subtitle">Access your data analysis sandbox securely</p>
+
+    <!-- Success & Error Alert Panels -->
+    <div class="error-message" id="error-banner"></div>
+    <div class="success-message" id="success-banner"></div>
+
+    <!-- MAIN FORM SWITCHER TABS -->
+    <div class="tabs-row" id="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- 1. LOGIN & REGISTER FORM -->
+    <form id="auth-form">
+      <div class="form-group" id="name-group" style="display: none;">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="John Doe">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="name@company.com">
+      </div>
+
+      <div class="form-group" id="mobile-group" style="display: none;">
+        <label for="mobile">Mobile Number (Optional)</label>
+        <input type="tel" id="mobile" placeholder="+1234567890">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+
+      <!-- LEGAL DISCLAIMER CHECKBOX (REQUIRED FOR SIGNUP) -->
+      <div class="terms-group" id="terms-box" style="display: none;">
+        <label class="checkbox-container">
+          <input type="checkbox" id="terms-checkbox" onchange="toggleSignupButton()">
+          <span class="checkmark"></span>
+          I agree to the <span class="legal-trigger" onclick="openLegalTerms()">Terms and Conditions</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submit-btn">Continue</button>
+    </form>
+
+    <!-- SOCIAL OAUTH SIGN IN BUTTONS -->
+    <div id="oauth-row">
+      <div class="divider"><span>OR CONTINUE WITH</span></div>
+      <div class="oauth-buttons">
+        <button onclick="triggerOAuth('Google')" class="oauth-btn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google"> Google
+        </button>
+        <button onclick="triggerOAuth('GitHub')" class="oauth-btn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub"> GitHub
+        </button>
+      </div>
+    </div>
+
+    <!-- RECOVERY NAVIGATION LINKS -->
+    <div class="recovery-links" id="recovery-nav">
+      <p><span onclick="switchTab('recovery')">Forgot Password?</span></p>
+      <p><span onclick="switchTab('id-recovery')">Forgot Login Email/ID?</span></p>
+    </div>
+  </div>
+
+  <!-- ================= ACCOUNT RECOVERY PANEL ================= -->
+  <div class="auth-container" id="recovery-panel" style="display: none;">
+    <h2>Recover Account</h2>
+    <p class="subtitle">Reset credentials or retrieve user ID</p>
+
+    <div class="error-message" id="rec-error-banner"></div>
+    <div class="success-message" id="rec-success-banner"></div>
+
+    <!-- Recovery Mode A: Forgot Password -->
+    <div id="forgot-password-view">
+      <div class="form-group">
+        <label for="recover-email">Enter Registered Email</label>
+        <input type="email" id="recover-email" placeholder="name@company.com">
+      </div>
+      <button onclick="sendPasswordReset()" class="btn-primary">Generate Reset Link</button>
+    </div>
+
+    <!-- Recovery Mode B: Forgot ID -->
+    <div id="forgot-id-view" style="display: none;">
+      <div class="form-group">
+        <label for="recover-mobile">Enter Registered Mobile</label>
+        <input type="tel" id="recover-mobile" placeholder="+1234567890">
+      </div>
+      <button onclick="recoverLoginId()" class="btn-primary">Fetch Registered ID</button>
+    </div>
+
+    <button onclick="switchTab('login')" class="btn-secondary">Back to Sign In</button>
+  </div>
+
+  <!-- ================= PASSWORD RESET MODAL WINDOW ================= -->
+  <div class="modal-overlay" id="reset-modal" style="display: none;">
+    <div class="modal-box">
+      <h3>Set New Password</h3>
+      <p class="text-slate-400 text-xs mb-4">Enter a strong, unique password for authentication.</p>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="reset-new-password" placeholder="••••••••">
+      </div>
+      <div class="modal-actions">
+        <button onclick="closeResetModal()" class="btn-secondary">Cancel</button>
+        <button onclick="submitPasswordReset()" class="btn-primary">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LEGAL TERMS MODAL WINDOW ================= -->
+  <div class="modal-overlay" id="legal-modal" style="display: none;">
+    <div class="modal-box max-w-lg">
+      <h3>Terms & Conditions</h3>
+      <div class="legal-scroll">
+        <p><strong>DevForge High-Security Platform Agreement</strong></p>
+        <p>By signing up or accessing DevForge sandbox, you consent to standard analytical telemetry collection, JWT hashing profiles, and dynamic routing checks.</p>
+        
+        <p class="legal-clause">
+          ⚠️ <strong>High-Security & Technical Glitches Clause:</strong><br>
+          We utilize high-security systems. However, we hold no legal liability for any incorrect data analysis, faulty reports, or business losses caused by server downtime, technical glitches, or software bugs. Users must verify critical outcomes independently.
+        </p>
+        
+        <p>Please double-check all metrics, averages, totals, and compilations before presenting slides or documents to stakeholders.</p>
+      </div>
+      <div class="modal-actions">
+        <button onclick="closeLegalTerms()" class="btn-primary">I Understand</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN SAAS EXECUTIVE COCKPIT (DASHBOARD) ================= -->
+  <div class="auth-container max-w-4xl" id="dashboard-panel" style="display: none;">
+    
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="flex items-center gap-3">
+        <div class="logo-circle">📊</div>
+        <div>
+          <h2>DevForge Sandbox</h2>
+          <p class="text-xs text-slate-400">Active Profile: <strong id="profile-name">John Doe</strong> (<span id="profile-email">email@domain.com</span>)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="badge" id="plan-badge">7-Day Free Trial</span>
+        <button onclick="logout()" class="logout-btn">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Trial Countdown banner -->
+    <div class="trial-banner" id="trial-alert" style="display: none;">
+      <div>⏰ <strong>Trial Lifecycle Notice:</strong> Your evaluation workspace ends in <strong id="trial-countdown">7</strong> days. Upgrade to Pro to bypass filters.</div>
+    </div>
+
+    <!-- Main Grid Dashboard Body -->
+    <div class="dashboard-grid">
+      
+      <!-- Left side: SaaS Features Gates Dashboard -->
+      <div class="panel-card lg:col-span-7">
+        <h3>SaaS Analytical Feature Locks</h3>
+        <p class="text-xs text-slate-400 mb-4">Features automatically lock/unlock based on database plan permissions.</p>
+
+        <!-- Dynamic Access Alerts -->
+        <div id="gate-alert-success" class="success-message"></div>
+        <div id="gate-alert-error" class="error-message"></div>
+
+        <div class="feature-locks-list">
+          
+          <!-- Feature 1: CSV Upload -->
+          <div class="feature-item" id="lock-csv-upload" onclick="triggerFeatureGate('csv-upload')">
+            <div class="feature-icon">📁</div>
+            <div class="feature-desc">
+              <h4>CSV Data Cleaner Grid</h4>
+              <p>Clean and structure raw spreadsheet records.</p>
+            </div>
+            <div class="lock-indicator" id="lock-status-csv-upload">🔓 Unlocked</div>
+          </div>
+
+          <!-- Feature 2: Plotly Charts -->
+          <div class="feature-item" id="lock-plotly-charts" onclick="triggerFeatureGate('plotly-charts')">
+            <div class="feature-icon">📈</div>
+            <div class="feature-desc">
+              <h4>16+ Plotly Visualizations</h4>
+              <p>Dynamic drag-and-drop custom themed charts.</p>
+            </div>
+            <div class="lock-indicator" id="lock-status-plotly-charts">🔓 Unlocked</div>
+          </div>
+
+          <!-- Feature 3: Predictive Forecasts -->
+          <div class="feature-item" id="lock-predictive-forecasts" onclick="triggerFeatureGate('predictive-forecasts')">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-desc">
+              <h4>Predictive AI Forecasting</h4>
+              <p>Trend regression and live factory streams.</p>
+            </div>
+            <div class="lock-indicator" id="lock-status-predictive-forecasts">🔒 Locked</div>
+          </div>
+
+          <!-- Feature 4: Word Reports Studio -->
+          <div class="feature-item" id="lock-word-reports" onclick="triggerFeatureGate('word-reports')">
+            <div class="feature-icon">✨</div>
+            <div class="feature-desc">
+              <h4>Word & Slides Compiling Studio</h4>
+              <p>21-Agent Orchestra compilation compilers.</p>
+            </div>
+            <div class="lock-indicator" id="lock-status-word-reports">🔒 Locked</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right side: Granular Plan Builder (Admin Simulator Panel) -->
+      <div class="panel-card lg:col-span-5 admin-panel">
+        <div class="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
+          <h3>🔧 Plan Builder</h3>
+          <span class="admin-badge">Super Admin</span>
+        </div>
+        <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest mb-3">Dynamically Assign allowed Features to plans</p>
+
+        <!-- Plan Dropdown selector -->
+        <div class="form-group mb-4">
+          <label>Select Plan to Mutate</label>
+          <select id="admin-plan-select" onchange="loadAdminPlanPermissions()" class="w-full bg-slate-950 border border-white/10 rounded-lg p-2 text-xs cursor-pointer focus:outline-none focus:border-purple-500">
+            <option value="trial">7-Day Free Trial</option>
+            <option value="growth">Growth BI Pro</option>
+            <option value="enterprise">Enterprise Suite</option>
+          </select>
+        </div>
+
+        <!-- Checkbox list of features -->
+        <div class="admin-features-check-list" id="admin-checklist-root">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <button onclick="saveAdminPlanPermissions()" class="btn-primary mt-4 py-2 text-xs">Save Gates Configuration</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let activeTab = 'login';
+    const API_BASE = '/api';
+    let activeUserPlan = 'trial';
+    let masterPlans = [];
+    let masterFeatures = [];
+    let activeMappings = [];
+    let simulatedResetToken = '';
+
+    // Elements
+    const authPanel = document.getElementById('auth-panel');
+    const dashboardPanel = document.getElementById('dashboard-panel');
+    const recoveryPanel = document.getElementById('recovery-panel');
+    const authForm = document.getElementById('auth-form');
+    
+    // Auth Input Nodes
+    const nameGroup = document.getElementById('name-group');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const mobileGroup = document.getElementById('mobile-group');
+    const mobileInput = document.getElementById('mobile');
+    const passwordInput = document.getElementById('password');
+    const termsBox = document.getElementById('terms-box');
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const submitBtn = document.getElementById('submit-btn');
+    const panelSubtitle = document.getElementById('panel-subtitle');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const oauthRow = document.getElementById('oauth-row');
+    const recoveryNav = document.getElementById('recovery-nav');
+    
+    // Banners
+    const errorBanner = document.getElementById('error-banner');
+    const successBanner = document.getElementById('success-banner');
+    const recErrorBanner = document.getElementById('rec-error-banner');
+    const recSuccessBanner = document.getElementById('rec-success-banner');
+    const gateSuccess = document.getElementById('gate-alert-success');
+    const gateError = document.getElementById('gate-alert-error');
+
+    // On Load: Verify Active User Sessions
+    window.addEventListener('DOMContentLoaded', () => {
+      checkSessionState();
+    });
+
+    // 1. SWITCHING BETWEEN ACTION COCKPITS
+    function switchTab(mode) {
+      activeTab = mode;
+      errorBanner.style.display = 'none';
+      successBanner.style.display = 'none';
+      recErrorBanner.style.display = 'none';
+      recSuccessBanner.style.display = 'none';
+      authForm.reset();
+
+      if (mode === 'login') {
+        authPanel.style.display = 'block';
+        recoveryPanel.style.display = 'none';
+        dashboardPanel.style.display = 'none';
+        nameGroup.style.style = 'none';
+        mobileGroup.style.display = 'none';
+        termsBox.style.display = 'none';
+        nameInput.required = false;
+        
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        panelSubtitle.innerText = 'Access your data analysis sandbox securely';
+        submitBtn.innerText = 'Continue';
+        submitBtn.disabled = false;
+        oauthRow.style.display = 'block';
+        recoveryNav.style.display = 'flex';
+      } 
+      else if (mode === 'register') {
+        authPanel.style.display = 'block';
+        recoveryPanel.style.display = 'none';
+        dashboardPanel.style.display = 'none';
+        nameGroup.style.display = 'block';
+        mobileGroup.style.display = 'block';
+        termsBox.style.display = 'block';
+        nameInput.required = true;
+        
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+        panelSubtitle.innerText = 'Create your secure account and begin 7-Day trial';
+        submitBtn.innerText = 'Sign Up';
+        toggleSignupButton(); // Lock button until terms checked
+        oauthRow.style.display = 'block';
+        recoveryNav.style.display = 'none';
+      } 
+      else if (mode === 'recovery') {
+        authPanel.style.display = 'none';
+        recoveryPanel.style.display = 'block';
+        document.getElementById('forgot-password-view').style.display = 'block';
+        document.getElementById('forgot-id-view').style.display = 'none';
+      } 
+      else if (mode === 'id-recovery') {
+        authPanel.style.display = 'none';
+        recoveryPanel.style.display = 'block';
+        document.getElementById('forgot-password-view').style.display = 'none';
+        document.getElementById('forgot-id-view').style.display = 'block';
+      }
+    }
+
+    // Lock Submit button until checkbox accepts high-security T&C terms
+    function toggleSignupButton() {
+      if (activeTab === 'register') {
+        submitBtn.disabled = !termsCheckbox.checked;
+      }
+    }
+
+    // Modal display control
+    function openLegalTerms() { document.getElementById('legal-modal').style.display = 'flex'; }
+    function closeLegalTerms() { document.getElementById('legal-modal').style.display = 'none'; }
+    function closeResetModal() { document.getElementById('reset-modal').style.display = 'none'; }
+
+    // ================= REGISTER & LOGIN ROUTING CONTROLLER =================
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+      successBanner.style.display = 'none';
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (activeTab === 'login') {
+        try {
+          const res = await fetch(`${API_BASE}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+
+          localStorage.setItem('saas_token', data.token);
+          checkSessionState();
+        } catch (err) {
+          errorBanner.innerText = err.message;
+          errorBanner.style.display = 'block';
+        }
+      } 
+      else if (activeTab === 'register') {
+        const name = nameInput.value.trim();
+        const mobile = mobileInput.value.trim();
+        const termsAccepted = termsCheckbox.checked;
+
+        try {
+          const res = await fetch(`${API_BASE}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, mobile, password, termsAccepted })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+
+          successBanner.innerText = data.message;
+          successBanner.style.display = 'block';
+          switchTab('login');
+        } catch (err) {
+          errorBanner.innerText = err.message;
+          errorBanner.style.display = 'block';
+        }
+      }
+    });
+
+    // Google / GitHub Social Sign-in simulator
+    async function triggerOAuth(provider) {
+      const email = `oauth_${provider.toLowerCase()}_${Math.floor(Math.random() * 1000)}@devforge.com`;
+      const name = `${provider} Tester`;
+
+      try {
+        const res = await fetch(`${API_BASE}/oauth-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ provider, name, email, oauthToken: 'mock_oauth_key_12345' })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        localStorage.setItem('saas_token', data.token);
+        checkSessionState();
+      } catch (err) {
+        alert("OAuth simulation error: " + err.message);
+      }
+    }
+
+    // ================= ACCOUNT RECOVERY LAYERS =================
+
+    // Recover ID using Mobile number
+    async function recoverLoginId() {
+      recErrorBanner.style.display = 'none';
+      recSuccessBanner.style.display = 'none';
+      const mobile = document.getElementById('recover-mobile').value.trim();
+
+      try {
+        const res = await fetch(`${API_BASE}/recover-login-id`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        recSuccessBanner.innerHTML = `
+          <strong>${data.message}</strong><br>
+          Masked ID: <span class="text-white">${data.maskedEmail}</span><br>
+          <span style="font-size: 10px; color: #a855f7;">Demo Mode Raw: ${data.rawEmail}</span>
+        `;
+        recSuccessBanner.style.display = 'block';
+      } catch (e) {
+        recErrorBanner.innerText = e.message;
+        recErrorBanner.style.display = 'block';
+      }
+    }
+
+    // Forgot Password - Compile Time Limited token
+    async function sendPasswordReset() {
+      recErrorBanner.style.display = 'none';
+      recSuccessBanner.style.display = 'none';
+      const email = document.getElementById('recover-email').value.trim();
+
+      try {
+        const res = await fetch(`${API_BASE}/forgot-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        // Simulation reset token fetch
+        const queryParams = data.resetLink.split('?')[1];
+        simulatedResetToken = new URLSearchParams(queryParams).get('token');
+
+        recSuccessBanner.innerHTML = `
+          <strong>${data.message}</strong><br>
+          <button onclick="openResetModal()" class="btn-primary mt-2 py-1 text-xs">Simulate Email Open & Reset Password</button>
+        `;
+        recSuccessBanner.style.display = 'block';
+      } catch (e) {
+        recErrorBanner.innerText = e.message;
+        recErrorBanner.style.display = 'block';
+      }
+    }
+
+    function openResetModal() {
+      document.getElementById('reset-modal').style.display = 'flex';
+    }
+
+    // Submit Password Reset using valid JWT
+    async function submitPasswordReset() {
+      const newPassword = document.getElementById('reset-new-password').value;
+      if (!newPassword) return alert("Please type a new password.");
+
+      try {
+        const res = await fetch(`${API_BASE}/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: simulatedResetToken, newPassword })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert(data.message);
+        closeResetModal();
+        switchTab('login');
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    // ================= COCKPIT SESSION LOADER =================
+    async function checkSessionState() {
+      const token = localStorage.getItem('saas_token');
+
+      if (token) {
+        authPanel.style.display = 'none';
+        recoveryPanel.style.display = 'none';
+        dashboardPanel.style.display = 'block';
+
+        try {
+          const res = await fetch(`${API_BASE}/profile`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+
+          const { user, trialDaysRemaining } = data;
+          activeUserPlan = user.plan_id;
+
+          // Hydrate profile fields
+          document.getElementById('profile-name').innerText = user.name;
+          document.getElementById('profile-email').innerText = user.email;
+          document.getElementById('plan-badge').innerText = user.plan_id.toUpperCase() + ' PLAN';
+
+          // Hydrate Trial Indicator
+          const trialAlert = document.getElementById('trial-alert');
+          if (user.plan_id === 'trial') {
+            trialAlert.style.display = 'block';
+            document.getElementById('trial-countdown').innerText = trialDaysRemaining !== null ? trialDaysRemaining : 'Expired';
+            if (trialDaysRemaining <= 0) {
+              document.getElementById('trial-countdown').innerHTML = `<span class="text-rose-400">EXPIRED</span>`;
+            }
+          } else {
+            trialAlert.style.display = 'none';
+          }
+
+          // Hydrate locked indicators and fetch Master Matrix Maps
+          loadAdminPlansMatrix();
+        } catch (e) {
+          logout();
+        }
+      } else {
+        authPanel.style.display = 'block';
+        recoveryPanel.style.display = 'none';
+        dashboardPanel.style.display = 'none';
+        switchTab('login');
+      }
+    }
+
+    // Secure logout
+    function logout() {
+      localStorage.removeItem('saas_token');
+      checkSessionState();
+    }
+
+    // ================= FEATURE ACCESS REQUEST GATES =================
+    async function triggerFeatureGate(featureCode) {
+      gateSuccess.style.display = 'none';
+      gateError.style.display = 'none';
+      const token = localStorage.getItem('saas_token');
+
+      try {
+        const res = await fetch(`${API_BASE}/features/${featureCode}`, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error);
+
+        gateSuccess.innerText = `🟢 ${data.data}`;
+        gateSuccess.style.display = 'block';
+      } catch (e) {
+        gateError.innerText = `🔴 ${e.message}`;
+        gateError.style.display = 'block';
+      }
+    }
+
+    // ================= ADMIN PLAN BUILDER INTERACTIVE ENGINE =================
+    
+    // Fetch and draw checkboxes and plan configuration from Database
+    async function loadAdminPlansMatrix() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/plans`);
+        const data = await res.json();
+        
+        masterPlans = data.plans;
+        masterFeatures = data.features;
+        activeMappings = data.mappings;
+
+        // Draw Admin checkboxes
+        loadAdminPlanPermissions();
+        
+        // Dynamic dashboard locks refresh
+        updateDashboardLocksUI();
+      } catch (e) {
+        console.error("Failed to load plans matrix:", e);
+      }
+    }
+
+    // Renders custom check boxes in Admin panel
+    function loadAdminPlanPermissions() {
+      const selectedPlan = document.getElementById('admin-plan-select').value;
+      const root = document.getElementById('admin-checklist-root');
+      root.innerHTML = '';
+
+      masterFeatures.forEach(feat => {
+        // Evaluate if this feature is checked in our active mapping Pivot Table
+        const isMapped = activeMappings.some(m => m.plan_id === selectedPlan && m.feature_code === feat.code);
+        
+        const row = document.createElement('div');
+        row.className = 'admin-check-row';
+        row.innerHTML = `
+          <label class="checkbox-container">
+            <input type="checkbox" value="${feat.code}" ${isMapped ? 'checked' : ''} class="admin-feat-checkbox">
+            <span class="checkmark"></span>
+            <div>
+              <strong class="text-xs text-white">${feat.name}</strong>
+              <p style="font-size: 9px; color: #64748b; margin-top: 2px;">${feat.description}</p>
+            </div>
+          </label>
+        `;
+        root.appendChild(row);
+      });
+    }
+
+    // Save checked checkboxes back to SQLite databases in real-time
+    async function saveAdminPlanPermissions() {
+      const plan_id = document.getElementById('admin-plan-select').value;
+      const checkboxes = document.querySelectorAll('.admin-feat-checkbox');
+      const feature_codes = [];
+      
+      checkboxes.forEach(box => {
+        if (box.checked) {
+          feature_codes.push(box.value);
+        }
+      });
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/plans/update-features`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan_id, feature_codes })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert(data.message);
+        
+        // Reload permissions from server and update dynamic UI locks
+        loadAdminPlansMatrix();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    // Recheck locking indicators on User dashboard based on server rules
+    function updateDashboardLocksUI() {
+      masterFeatures.forEach(feat => {
+        const isUnlocked = activeMappings.some(m => m.plan_id === activeUserPlan && m.feature_code === feat.code);
+        
+        const statusNode = document.getElementById(`lock-status-${feat.code}`);
+        const cardNode = document.getElementById(`lock-${feat.code}`);
+        
+        if (statusNode && cardNode) {
+          if (isUnlocked) {
+            statusNode.innerText = '🔓 Unlocked';
+            statusNode.className = 'lock-indicator unlocked';
+            cardNode.classList.remove('locked-card');
+          } else {
+            statusNode.innerText = '🔒 Locked';
+            statusNode.className = 'lock-indicator';
+            cardNode.classList.add('locked-card');
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
