@@ -1114,7 +1114,8 @@ ${statsInfo ? Object.values(statsInfo.stats).map((col: any) => `| **${col.name}*
         const csvBlob = new Blob([csvText], { type: 'text/csv' });
         formData.append('file', csvBlob, storedFileName);
 
-        const res = await fetch('http://localhost:8000/api/powerbi', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vikas0502-my-web-backend.hf.space';
+        const res = await fetch(`${apiUrl}/api/powerbi`, {
           method: 'POST',
           body: formData,
         });
@@ -1200,7 +1201,8 @@ ${statsInfo ? Object.values(statsInfo.stats).map((col: any) => `| **${col.name}*
 
     setIsEmailing(true);
     try {
-      const res = await fetch('http://localhost:8000/api/email-report', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vikas0502-my-web-backend.hf.space';
+      const res = await fetch(`${apiUrl}/api/email-report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1780,7 +1780,8 @@ export default function DataLab() {
 
       const targetCol = headers.find(h => h.toLowerCase().includes('churn') || h.toLowerCase().includes('risk')) || headers[headers.length - 1];
 
-      const res = await fetch(`http://localhost:8000/api/train?target_column=${encodeURIComponent(targetCol)}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vikas0502-my-web-backend.hf.space';
+      const res = await fetch(`${apiUrl}/api/train?target_column=${encodeURIComponent(targetCol)}`, {
         method: 'POST',
         body: formData,
       });
@@ -2059,7 +2060,8 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
       const formData = new FormData();
       formData.append('file', blob, fileName || 'dataset.csv');
 
-      const res = await fetch('http://localhost:8000/api/clean', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vikas0502-my-web-backend.hf.space';
+      const res = await fetch(`${apiUrl}/api/clean`, {
         method: 'POST',
         body: formData,
       });
