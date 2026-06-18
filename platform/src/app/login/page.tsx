@@ -175,7 +175,7 @@ export default function LoginPage() {
           {/* Success Banner */}
           {success && (
             <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs text-center leading-relaxed">
-              <div className="mt-8 space-y-3">
+              {success}
               {resetToken && (
                 <div className="mt-2 p-2 bg-slate-950/50 border border-white/5 rounded text-[10px] select-all break-all font-mono text-slate-400">
                   Verification Token: {resetToken}
