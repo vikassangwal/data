@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UniversalAIGateway } from '@/lib/ai/gateway';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const payload = await req.json();
