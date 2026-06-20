@@ -6,6 +6,7 @@ import prisma from '@/lib/db';
 import bcrypt from 'bcryptjs';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET || 'devforge_super_secret_fallback_key_2026',
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   basePath: '/api/auth',
