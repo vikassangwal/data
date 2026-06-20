@@ -86,8 +86,8 @@ export async function registerUser(formData: FormData) {
     const trialEndsAt = new Date();
     trialEndsAt.setDate(trialEndsAt.getDate() + 7);
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate static OTP for testing since SMTP is not configured
+    const otp = '123456';
     const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     if (existingEmail && !existingEmail.emailVerified) {
@@ -219,8 +219,8 @@ export async function forgotPassword(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return { error: 'No user account matches this email address.' };
 
-    // Generate random 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate static OTP for testing since SMTP is not configured
+    const otp = '123456';
     
     await prisma.user.update({
       where: { email },
