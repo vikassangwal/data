@@ -13,7 +13,7 @@ export async function sendMail({ to, subject, html }: SendMailOptions) {
   try {
     // Determine configuration from environment variables (with hardcoded fallbacks for Vercel)
     const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-    const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
+    const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
     const smtpUser = process.env.SMTP_USER || 'vikas.sangwal.05@gmail.com';
     const smtpPass = process.env.SMTP_PASS || 'bjmcrensqyfqjyyt';
     
