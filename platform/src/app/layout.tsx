@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://vkfort.vercel.app'),
   manifest: "/manifest.json",
   title: {
     default: "DevForge | AI-Powered Development & Analytics",
@@ -40,6 +40,9 @@ export const metadata: Metadata = {
       "Premium AI-powered development, data analytics, and automation services.",
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "Xz3qMtC7IM85GL8oKEgOJ_ZE05AgUfTieSjpCzmMRxA",
+  },
 };
 
 import { AnimationProvider } from '@/components/providers/AnimationProvider';

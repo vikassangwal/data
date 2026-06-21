@@ -99,8 +99,43 @@ export default function IntegrationsClient() {
       getUserDataIntegrations(),
       getUserEnterpriseDbs(),
     ]);
-    if (pRes.success) setProviders(pRes.providers);
-    if (iRes.success && iRes.integrations) setIntegrations(iRes.integrations as Integration[]);
+    
+    let loadedProviders = pRes.success ? pRes.providers : [];
+    let loadedIntegrations = iRes.success && iRes.integrations ? iRes.integrations as Integration[] : [];
+
+    // Inject Local Data Lab file if it exists
+    try {
+      const localStr = localStorage.getItem('global_shared_dataset');
+      if (localStr) {
+        const localData = JSON.parse(localStr);
+        loadedProviders = [
+          {
+            id: 'local_datalab',
+            name: 'Data Lab Upload',
+            icon: '📁',
+            color: '#10b981',
+            scopes: 'read',
+            description: `Active file: ${localData.name}. Uploaded via Cinematic Data Lab. Ready for cross-platform AI Analysis.`,
+            category: 'Local Files'
+          },
+          ...loadedProviders
+        ];
+        loadedIntegrations = [
+          {
+            id: 'local_int_1',
+            provider: 'local_datalab',
+            status: 'connected',
+            lastSyncAt: new Date(localData.timestamp).toISOString(),
+            providerAccountId: 'local',
+            metadata: null
+          },
+          ...loadedIntegrations
+        ];
+      }
+    } catch (e) {}
+
+    setProviders(loadedProviders);
+    setIntegrations(loadedIntegrations);
     if (dRes.success && dRes.databases) setDatabases(dRes.databases as EntDb[]);
     setLoading(false);
   }

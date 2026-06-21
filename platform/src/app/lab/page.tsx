@@ -1457,7 +1457,7 @@ export default function DataLab() {
         clearInterval(pipelineInterval);
         setIsPipelineRunning(false);
       }
-    }, 1200);
+    }, 100);
   };
 
   const handleFileUpload = (fileObj: File, name: string, size: number, type: string) => {
@@ -1570,6 +1570,7 @@ export default function DataLab() {
           try {
             localStorage.setItem('lab_uploaded_csv', csvText);
             localStorage.setItem('lab_uploaded_filename', name);
+            localStorage.setItem('global_shared_dataset', JSON.stringify({ name, text: csvText, size, type, timestamp: Date.now() }));
           } catch (e) {
             console.warn('Could not store CSV in localStorage:', e);
           }
@@ -1599,7 +1600,7 @@ export default function DataLab() {
         setScanState('done');
         startPipeline();
       }
-    }, 700);
+    }, 50);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -1717,7 +1718,7 @@ export default function DataLab() {
         `);
         printWindow.document.close();
       }
-    }, 1200);
+    }, 100);
   };
 
 
