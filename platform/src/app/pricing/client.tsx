@@ -12,7 +12,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import Accordion from '@/components/ui/Accordion';
 import DataGridBG from '@/components/vfx/DataGridBG';
-import { simulateCheckout } from '@/app/actions/pricing';
+// import { simulateCheckout } from '@/app/actions/pricing';
 
 /* ─── Add-Ons ─── */
 const addOns = [
@@ -109,21 +109,81 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const handleCheckout = async (planId: string) => {
+  const handleCheckout = async (planId: string, amount: number) => {
     setLoadingTier(planId);
     setFeedback(null);
     try {
-      const res = await simulateCheckout(planId);
-      if (res.success) {
-        setFeedback(res.message || 'Upgraded successfully!');
-        window.location.reload();
-      } else {
-        setFeedback('Error: ' + (res.error || 'Failed to complete transaction.'));
+      // 1. Load Razorpay script
+      const scriptLoaded = await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+
+      if (!scriptLoaded) {
+        setFeedback('Error: Failed to load Razorpay SDK');
+        setLoadingTier(null);
+        return;
       }
+
+      // 2. Create Order
+      const response = await fetch('/api/payments/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId, amount, currency: 'INR' })
+      });
+      const data = await response.json();
+
+      if (!data.success) {
+        setFeedback('Error: ' + data.error);
+        setLoadingTier(null);
+        return;
+      }
+
+      // 3. Initialize Razorpay Checkout
+      const options = {
+        key: data.key,
+        amount: data.amount,
+        currency: 'INR',
+        name: 'Platform Access',
+        description: `Upgrade to ${planId} Plan`,
+        order_id: data.orderId,
+        handler: async function (response: any) {
+          setFeedback('Verifying payment...');
+          const verifyRes = await fetch('/api/payments/razorpay/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...response,
+              planId,
+              amount
+            })
+          });
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            setFeedback('Payment successful! Your plan has been upgraded.');
+            setTimeout(() => window.location.reload(), 2000);
+          } else {
+            setFeedback('Error: Payment verification failed.');
+          }
+        },
+        theme: {
+          color: '#3B82F6'
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        setFeedback('Error: Payment failed - ' + response.error.description);
+      });
+      rzp.open();
+      
     } catch (err: any) {
       setFeedback('Unexpected error during checkout.');
     } finally {
-      setLoadingTier(null);
+      // Don't clear loading state if opening modal so it shows "Processing..."
     }
   };
 
@@ -333,7 +393,7 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
                               size="lg"
                               fullWidth
                               disabled={loadingTier !== null}
-                              onClick={() => handleCheckout(tier.id)}
+                              onClick={() => handleCheckout(tier.id, price)}
                               className={
                                 tier.popular
                                   ? 'bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] border-0 text-white hover:shadow-lg hover:shadow-[#3B82F6]/25 cursor-pointer'
