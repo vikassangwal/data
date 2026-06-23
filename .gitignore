@@ -13,3 +13,6 @@ __pycache__/
 dev.db
 coverage/
 test-results/
+
+platform/uploads/
+platform/tests/reports/

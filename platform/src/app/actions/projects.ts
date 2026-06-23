@@ -12,7 +12,75 @@ export async function getProjects() {
         tags: true,
       }
     });
-    return { success: true, data: projects };
+    const hardcodedProjects = [
+      {
+        id: 'hardcoded-1',
+        title: 'Automata Labs',
+        slug: 'automata-labs',
+        description: 'An advanced AI automation platform and laboratory.',
+        category: 'AI & Automation',
+        liveUrl: 'https://automata-labs.vercel.app/',
+        githubUrl: '',
+        imageUrl: '',
+        gradient: 'from-blue-500 to-cyan-500',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        metrics: [],
+        tags: [{ id: 't1', type: 'tech', name: 'Next.js' }, { id: 't2', type: 'tech', name: 'AI' }],
+      },
+      {
+        id: 'hardcoded-2',
+        title: 'AI Booking Agent',
+        slug: 'ai-booking-agent',
+        description: 'An intelligent AI booking agent built for modern businesses.',
+        category: 'AI Agents',
+        liveUrl: 'https://ai-booking-agent-r2go.onrender.com/',
+        githubUrl: '',
+        imageUrl: '',
+        gradient: 'from-purple-500 to-indigo-500',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        metrics: [],
+        tags: [{ id: 't3', type: 'tech', name: 'Python' }, { id: 't4', type: 'tech', name: 'AI' }],
+      },
+      {
+        id: 'hardcoded-3',
+        title: 'Study Fintech',
+        slug: 'study-fintech',
+        description: 'A dedicated platform for financial technology learning and insights.',
+        category: 'Fintech',
+        liveUrl: 'https://studyfintech.vercel.app/',
+        githubUrl: '',
+        imageUrl: '',
+        gradient: 'from-green-500 to-emerald-500',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        metrics: [],
+        tags: [{ id: 't5', type: 'tech', name: 'Next.js' }, { id: 't6', type: 'tech', name: 'Finance' }],
+      },
+      {
+        id: 'hardcoded-4',
+        title: 'VK Fort',
+        slug: 'vk-fort',
+        description: 'Enterprise AI & Analytics Dashboard.',
+        category: 'Dashboard',
+        liveUrl: 'https://vkfort.vercel.app/',
+        githubUrl: '',
+        imageUrl: '',
+        gradient: 'from-orange-500 to-red-500',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        metrics: [],
+        tags: [{ id: 't7', type: 'tech', name: 'React' }, { id: 't8', type: 'tech', name: 'Analytics' }],
+      }
+    ];
+
+    const allProjects = [...hardcodedProjects, ...projects];
+    return { success: true, data: allProjects };
   } catch (error: any) {
     console.error('Error fetching projects:', error);
     return { success: false, error: error.message };
