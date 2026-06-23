@@ -24,7 +24,10 @@ export async function createBlogPost(formData: FormData) {
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
     const imageUrl = formData.get('imageUrl') as string || '';
-    
+    const seoTitle = formData.get('seoTitle') as string || '';
+    const seoDesc = formData.get('seoDesc') as string || '';
+    const seoKeywords = formData.get('seoKeywords') as string || '';
+
     // Auto-generate slug
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
@@ -46,16 +49,61 @@ export async function createBlogPost(formData: FormData) {
         content,
         imageUrl,
         slug,
+        seoTitle: seoTitle || null,
+        seoDesc: seoDesc || null,
+        seoKeywords: seoKeywords || null,
         published: false,
         authorId: author.id
+      },
+      include: {
+        author: true,
+        categories: true,
       }
     });
 
-    revalidatePath('/admin/content');
+    revalidatePath('/admin/blog');
     revalidatePath('/blog');
     return { success: true, data: post };
   } catch (error: any) {
     console.error('Error creating blog post:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateBlogPost(id: string, formData: FormData) {
+  try {
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+    const imageUrl = formData.get('imageUrl') as string || '';
+    const seoTitle = formData.get('seoTitle') as string || '';
+    const seoDesc = formData.get('seoDesc') as string || '';
+    const seoKeywords = formData.get('seoKeywords') as string || '';
+
+    // Re-generate slug from title
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+    const post = await prisma.blogPost.update({
+      where: { id },
+      data: {
+        title,
+        content,
+        imageUrl,
+        slug,
+        seoTitle: seoTitle || null,
+        seoDesc: seoDesc || null,
+        seoKeywords: seoKeywords || null,
+      },
+      include: {
+        author: true,
+        categories: true,
+      }
+    });
+
+    revalidatePath('/admin/blog');
+    revalidatePath('/blog');
+    return { success: true, data: post };
+  } catch (error: any) {
+    console.error('Error updating blog post:', error);
     return { success: false, error: error.message };
   }
 }
@@ -65,7 +113,7 @@ export async function deleteBlogPost(id: string) {
     await prisma.blogPost.delete({
       where: { id }
     });
-    revalidatePath('/admin/content');
+    revalidatePath('/admin/blog');
     revalidatePath('/blog');
     return { success: true };
   } catch (error: any) {
@@ -80,7 +128,7 @@ export async function toggleBlogPostStatus(id: string, published: boolean) {
       where: { id },
       data: { published }
     });
-    revalidatePath('/admin/content');
+    revalidatePath('/admin/blog');
     revalidatePath('/blog');
     return { success: true, data: post };
   } catch (error: any) {

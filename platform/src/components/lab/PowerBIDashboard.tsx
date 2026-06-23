@@ -1711,7 +1711,7 @@ ${statsInfo ? Object.values(statsInfo.stats).map((col: any) => `| **${col.name}*
                 )}
 
                 {/* Tabs Navigation */}
-                <div className="flex bg-slate-950 p-0.5 rounded-lg border border-white/5 ml-auto">
+                <div className="flex flex-wrap bg-slate-950 p-0.5 rounded-lg border border-white/5 ml-auto">
                   {(['overview', 'predictive', 'advanced', 'ai_custom'] as const).map(tab => (
                     <button
                       key={tab}
@@ -1777,7 +1777,7 @@ ${statsInfo ? Object.values(statsInfo.stats).map((col: any) => `| **${col.name}*
                   return (
                     <div key={key} className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-xl hover:border-white/20 transition-colors group cursor-move flex flex-col">
                       <div className="w-12 h-1 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity mx-auto mt-2 pointer-events-none" />
-                      <div className="flex-1 w-full relative">
+                      <div className="flex-1 w-full relative overflow-x-auto">
                         <Plot
                           data={darkFig.data}
                           layout={{ ...darkFig.layout, autosize: true }}
@@ -2520,7 +2520,7 @@ ${statsInfo ? Object.values(statsInfo.stats).map((col: any) => `| **${col.name}*
                 <button onClick={() => setAdminSettingsOpen(false)} className="text-slate-500 hover:text-white cursor-pointer"><X size={20}/></button>
               </div>
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* White Labeling */}
                 <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5">
                   <h4 className="text-emerald-400 font-bold mb-4 flex items-center gap-2"><LayoutDashboard size={16}/> Brand Setup</h4>

@@ -2443,7 +2443,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
             </div>
 
             {/* Simulated Live Count-Ups */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-white/5 border border-white/5 rounded-xl p-4 text-center glass-subtle">
                 <div className="text-2xl md:text-3xl font-black text-white font-mono">{statAcc}</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-widest font-semibold mt-1">{t.heroStatAcc}</div>
@@ -2474,7 +2474,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                 <div className="text-xs font-mono text-white/40">datamind_executive_kpi.py</div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-white/5 border border-white/5 rounded-xl p-4 glass-subtle">
                   <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Q1 Revenue Flow</div>
                   <div className="text-2xl font-black text-white font-mono">$482,000</div>
@@ -3224,7 +3224,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                         </svg>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-white/5 text-center">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4 pt-4 border-t border-white/5 text-center">
                         <div className="bg-white/5 rounded-lg py-2 border border-white/5">
                           <div className="text-[10px] text-white/50 uppercase">{t.lossVal}</div>
                           <div className="text-sm font-black font-mono text-red-400 mt-1">{metrics.loss.toFixed(4)}</div>
@@ -3341,7 +3341,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                       <h3 className="text-lg font-extrabold text-white mb-1">{t.pcaTitle}</h3>
                       <p className="text-xs text-[var(--text-secondary)] mb-6">{t.pcaSub}</p>
 
-                      <div className="grid grid-cols-3 gap-2 text-center mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center mb-6">
                         <div 
                           onClick={() => handleClusterSelect(1)}
                           className={`bg-white/5 border border-white/5 rounded-lg py-2.5 cursor-pointer hover:bg-white/10 transition-all ${activeClusterCount === 1 ? 'border-cyan-400 bg-cyan-400/10' : ''}`}
@@ -3450,7 +3450,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                       <h3 className="text-lg font-extrabold text-white mb-1">{t.ttestTitle}</h3>
                       <p className="text-xs text-[var(--text-secondary)] mb-6">{t.ttestSub}</p>
 
-                      <div className="grid grid-cols-2 gap-6 mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                         {/* Sample A Control */}
                         <div className="space-y-4">
                           <h4 className="text-[11px] font-bold text-cyan-400 uppercase tracking-widest border-b border-cyan-400/20 pb-2">{t.ttestSampleA}</h4>
@@ -3931,7 +3931,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-white/60 mb-1.5">{t.modalExpiry}</label>
                       <input 
