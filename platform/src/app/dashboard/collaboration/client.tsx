@@ -379,7 +379,7 @@ export default function CollaborationClient() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
                     { label: 'Members', value: selectedWs.memberCount, icon: <Users size={14} />, color: 'text-blue-400' },
                     { label: 'Datasets', value: selectedWs.datasetCount, icon: <Database size={14} />, color: 'text-emerald-400' },

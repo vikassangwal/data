@@ -345,7 +345,7 @@ export default function IntegrationsClient() {
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
               { label: 'Available', value: providers.length, icon: <Plug size={16} />, color: 'text-violet-400' },
               { label: 'Connected', value: connectedProviders.size, icon: <Wifi size={16} />, color: 'text-emerald-400' },
@@ -649,7 +649,7 @@ export default function IntegrationsClient() {
               <p className="text-xs text-slate-500 mb-6">Securely connect your database for real-time analysis.</p>
 
               <form onSubmit={handleAddDb} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="col-span-2">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">Connection Name</label>
                     <input

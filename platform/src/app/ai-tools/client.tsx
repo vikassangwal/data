@@ -331,7 +331,7 @@ export default function AIToolsClient({ datasets, trainedModels }: {
 
         {/* ─── Tool Tabs ─── */}
         <Container>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
             {TOOLS.map((tool, i) => {
               const Icon = tool.icon;
               const isActive = activeTool === tool.id;
@@ -467,7 +467,7 @@ export default function AIToolsClient({ datasets, trainedModels }: {
                     </div>
                     <div className="glass-card p-4 rounded-xl border border-white/5">
                       <h4 className="font-semibold text-sm mb-3">Predicted Values (next {results.predictions?.length} periods)</h4>
-                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 sm:grid-cols-6 gap-2">
                         {results.predictions?.map((p: number, i: number) => (
                           <div key={i} className="text-center p-2 rounded-lg bg-blue-500/5 border border-blue-500/10">
                             <span className="text-[10px] text-[var(--text-muted)] block">T+{i + 1}</span>
@@ -829,7 +829,7 @@ export default function AIToolsClient({ datasets, trainedModels }: {
 
                 {results?.type === 'cleaning_scan' && (
                   <div className="mt-4">
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                       <div className="glass-card p-3 rounded-xl border border-white/5 text-center">
                         <p className="text-[10px] text-[var(--text-muted)]">Total Rows</p>
                         <p className="text-xl font-bold text-[var(--text-primary)]">{results.stats?.rows?.toLocaleString()}</p>

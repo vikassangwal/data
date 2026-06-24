@@ -201,7 +201,7 @@ export default function SignupPage() {
                           <div key={level} className={`flex-1 rounded-full ${level <= strengthScore ? strengthColors[strengthScore] : 'bg-slate-800'}`} />
                         ))}
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground mt-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground mt-2">
                         <div className={`flex items-center gap-1.5 ${reqs.length ? 'text-emerald-400' : ''}`}>
                           <div className={`w-3 h-3 rounded-full flex items-center justify-center border ${reqs.length ? 'bg-emerald-500/20 border-emerald-500/50' : 'border-slate-700'}`}>
                             {reqs.length && <Check size={8} />}

@@ -1392,7 +1392,7 @@ export default function AdminDashboardPage() {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2.5 w-full max-w-[200px]">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full max-w-[200px]">
                       {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
                         <button
                           key={num}
@@ -1698,7 +1698,7 @@ export default function AdminDashboardPage() {
                           {/* Statistics Editor */}
                           <div className="border-t border-white/5 pt-4">
                             <span className="text-xs text-white/50 font-bold uppercase tracking-wider block mb-3">Core Performance Stats:</span>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               {aboutStats.map((stat, idx) => (
                                 <div key={idx} className="bg-black/30 border border-white/5 p-3 rounded-xl space-y-2">
                                   <span className="text-[10px] text-indigo-400 font-bold font-mono">STAT BLOCK #{idx + 1}</span>
@@ -1808,7 +1808,7 @@ export default function AdminDashboardPage() {
                             ))}
                           </div>
 
-                          <div className="grid grid-cols-3 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div className="flex flex-col gap-1.5 col-span-1">
                               <label className="text-[10px] text-white/50 font-bold">Tier Name:</label>
                               <input
@@ -1957,7 +1957,7 @@ export default function AdminDashboardPage() {
                           <div className="border-t border-white/5 pt-4">
                             <span className="text-xs text-white/50 font-bold uppercase tracking-wider block mb-3">Custom AI Sandbox KPIs:</span>
                             
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                               <div className="flex flex-col gap-1.5">
                                 <span className="text-[10px] text-white/40">Model Accuracy:</span>
                                 <input
@@ -2174,7 +2174,7 @@ export default function AdminDashboardPage() {
                                       </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3 text-xs">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                                       <div className="flex flex-col gap-1">
                                         <span className="text-[10px] text-white/40">Base Price ($):</span>
                                         <input
@@ -2209,7 +2209,8 @@ export default function AdminDashboardPage() {
                               <h4 className="text-xs font-bold text-white/50 uppercase tracking-widest">Dynamic Feature Permissions Matrix</h4>
                               
                               <div className="border border-white/10 rounded-xl overflow-hidden bg-black/40">
-                                <table className="w-full text-left border-collapse text-xs">
+                                <div className="overflow-x-auto w-full">
+<table className="w-full text-left border-collapse text-xs">
                                   <thead>
                                     <tr className="bg-white/5 border-b border-white/10 text-white/60 font-mono text-[10px]">
                                       <th className="p-3 font-semibold uppercase">SaaS System Feature</th>
@@ -2247,6 +2248,7 @@ export default function AdminDashboardPage() {
                                     ))}
                                   </tbody>
                                 </table>
+</div>
                               </div>
                             </div>
                           </div>
@@ -2265,7 +2267,7 @@ export default function AdminDashboardPage() {
                           className="space-y-6"
                         >
                           {/* Financial micro widgets */}
-                          <div className="grid grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="bg-black/40 border border-white/5 rounded-xl p-4 text-center font-mono">
                               <span className="text-[10px] text-white/40 block mb-1">REAL gross earnings</span>
                               <span className="text-xl font-bold text-teal-400">
@@ -2593,7 +2595,7 @@ export default function AdminDashboardPage() {
                       <h4 className="text-xs font-bold text-white/50 uppercase tracking-widest">Active Model Orchestration</h4>
 
                       {/* Model Select */}
-                      <div className="grid grid-cols-2 gap-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div className="flex flex-col gap-1.5">
                           <span className="text-[10px] text-white/40">Default Core LLM</span>
                           <select

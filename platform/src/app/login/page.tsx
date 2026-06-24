@@ -266,7 +266,7 @@ export default function LoginPage() {
                   or
                 </div>
  
-                <div className="grid grid-cols-2 gap-3 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                   <button 
                     onClick={() => triggerMockOAuth('Google')}
                     className="w-full flex items-center justify-center gap-2 bg-background border border-border hover:bg-muted text-foreground py-2.5 px-4 rounded-xl transition-all font-medium text-xs cursor-pointer"

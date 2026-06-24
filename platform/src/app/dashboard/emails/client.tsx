@@ -167,7 +167,7 @@ export default function EmailsClient() {
                     <h3 className="font-bold text-base mb-1 text-slate-200 line-clamp-1" title={template.name}>{template.name}</h3>
                     <p className="text-xs text-slate-500 line-clamp-1 mb-4 italic">"{template.subject}"</p>
 
-                    <div className="grid grid-cols-2 gap-2 mb-4 mt-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 mt-auto">
                       <div className="bg-slate-950 rounded-lg p-2 border border-slate-800">
                         <div className="text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1 mb-0.5"><Eye size={10} /> Open Rate</div>
                         <div className="text-sm font-bold text-emerald-400">{template.openRate}%</div>

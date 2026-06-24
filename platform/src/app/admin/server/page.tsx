@@ -125,7 +125,8 @@ export default function ServerMonitoring() {
           <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck size={18} className="text-emerald-400"/> Docker Containers</h2>
             <div className="flex-1 overflow-auto">
-              <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full">
+<table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-white/10 text-slate-400 text-sm">
                     <th className="pb-3 font-medium">Container</th>
@@ -161,6 +162,7 @@ export default function ServerMonitoring() {
                   </tr>
                 </tbody>
               </table>
+</div>
             </div>
           </div>
         </div>

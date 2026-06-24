@@ -1688,7 +1688,8 @@ export default function DataLab() {
               <div class="card">
                 <h1>DataMind AI Analytical Executive Summary</h1>
                 <h2>File: ${fileName} (${fileSize}) - Parsed local report</h2>
-                <table>
+                <div className="overflow-x-auto w-full">
+<table>
                   <thead>
                     <tr>
                       <th>Segment Name</th>
@@ -1708,6 +1709,7 @@ export default function DataLab() {
                     `).join('')}
                   </tbody>
                 </table>
+</div>
                 <div class="footer">
                   Generated autonomously via DataMind AI Cinematic Lab Platform. AES-256 Sandbox Protected.
                 </div>
@@ -2906,7 +2908,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                       
                       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                         <div className="md:col-span-7 flex flex-col gap-2">
-                          <div className="grid grid-cols-5 gap-1.5 text-center text-[9px] font-bold text-white/40 font-mono">
+                          <div className="grid grid-cols-1 sm:grid-cols-5 gap-1.5 text-center text-[9px] font-bold text-white/40 font-mono">
                             <span />
                             <span>REV</span>
                             <span>AD</span>
@@ -2915,7 +2917,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                           </div>
 
                           {variables.map((rowName) => (
-                            <div key={rowName} className="grid grid-cols-5 gap-1.5 items-center">
+                            <div key={rowName} className="grid grid-cols-1 sm:grid-cols-5 gap-1.5 items-center">
                               <span className="text-[9px] font-bold text-white/40 font-mono truncate">{rowName.substring(0, 3).toUpperCase()}</span>
                               {variables.map((colName) => {
                                 const val = matrixData[rowName][colName];
@@ -3093,7 +3095,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
 
                       <div className="mb-6">
                         <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-2">{t.selectAlgo}</label>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {(['XGBoost', 'NeuralNet', 'SVM', 'RandomForest'] as const).map((alg) => (
                             <button
                               key={alg}
@@ -3529,7 +3531,7 @@ print(f"Compilation Complete! Train Acc: {train_acc:.2%}, Test Acc: {test_acc:.2
                       </div>
 
                       {/* statistical calculations display */}
-                      <div className="bg-black/30 border border-white/5 rounded-xl p-4 grid grid-cols-3 gap-2 text-center font-mono text-[10px] mb-6">
+                      <div className="bg-black/30 border border-white/5 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center font-mono text-[10px] mb-6">
                         <div className="p-2.5 bg-white/5 border border-white/5 rounded-lg">
                           <div className="text-white/40 mb-1">{t.ttestTStat}</div>
                           <div className="text-sm font-black text-cyan-400">{tTestResult.tStat}</div>

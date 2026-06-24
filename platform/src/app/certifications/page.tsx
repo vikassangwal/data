@@ -46,7 +46,7 @@ export default function CertificationsPage() {
       <section className="pb-16">
         <Container>
           <ScrollReveal>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {stats.map(s => (
                 <div key={s.label} className="text-center p-6">
                   <div className="text-3xl font-bold gradient-text mb-1">{s.value}</div>

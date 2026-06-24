@@ -403,7 +403,7 @@ export default function AutoRepairPage() {
               </div>
 
               {/* DYNAMIC TELEMETRY DISPLAY */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="bg-white/5 border border-white/5 rounded-xl p-4 text-center glass-subtle">
                   <div className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mb-1">Health index</div>
                   <div className="text-xl md:text-2xl font-black font-mono transition-all">

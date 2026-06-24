@@ -253,7 +253,7 @@ export default function ReportsClient() {
                     />
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-bold text-slate-400 uppercase mb-1.5 block">Format</label>
                       <select 
@@ -281,7 +281,7 @@ export default function ReportsClient() {
 
                   <div>
                     <label className="text-xs font-bold text-slate-400 uppercase mb-1.5 block">Data Sources</label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {['Analytics', 'Finance & Stripe', 'User Management', 'Security Logs'].map((src, i) => (
                         <label key={i} className="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-600 transition-colors">
                           <input type="checkbox" defaultChecked={i < 2} className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-fuchsia-500 focus:ring-fuchsia-500 focus:ring-offset-slate-950" />

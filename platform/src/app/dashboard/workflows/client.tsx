@@ -212,7 +212,7 @@ export default function WorkflowsClient() {
                       <h3 className="font-bold text-lg mb-1 relative z-10">{wf.name}</h3>
                       <p className="text-xs text-slate-400 line-clamp-2 mb-6 flex-1 relative z-10">{wf.description}</p>
 
-                      <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t border-slate-800/50 relative z-10">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto pt-4 border-t border-slate-800/50 relative z-10">
                         <div>
                           <div className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-1">Trigger</div>
                           <div className="text-xs font-semibold text-slate-200 truncate">{wf.trigger}</div>

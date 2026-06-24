@@ -179,7 +179,8 @@ export default function CMSClient() {
                   </div>
                 ) : (
                   <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl overflow-hidden">
-                    <table className="w-full text-left border-collapse">
+                    <div className="overflow-x-auto w-full">
+<table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="bg-slate-900/80 border-b border-slate-800/80 text-xs text-slate-400 uppercase tracking-wider">
                           <th className="p-4 font-bold w-1/2">Title</th>
@@ -214,6 +215,7 @@ export default function CMSClient() {
                         ))}
                       </tbody>
                     </table>
+</div>
                   </div>
                 )}
               </div>

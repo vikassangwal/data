@@ -274,7 +274,7 @@ export default function BuilderClient() {
             {activeTab === 'add' && (
               <div className="space-y-4">
                 <p className="text-xs text-slate-500 mb-4">Click to append to selected container, or root.</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button onClick={() => handleAddElement('container')} className="bg-slate-950 border border-slate-800 rounded-lg p-3 flex flex-col items-center gap-2 hover:border-indigo-500/50 transition-colors">
                     <Box size={16} className="text-slate-400" />
                     <span className="text-[10px] font-semibold text-slate-300">Container</span>
@@ -366,7 +366,7 @@ export default function BuilderClient() {
                 {/* Spacing Settings */}
                 <div>
                   <h3 className="text-xs font-bold text-slate-400 uppercase mb-3">Spacing & Sizing</h3>
-                  <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
                       <label className="text-[10px] text-slate-500 mb-1 block">Width</label>
                       <input type="text" value={selectedNode.styles.width || ''} onChange={(e) => handleUpdateStyle('width', e.target.value)} placeholder="auto, 100%, 50px" className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
@@ -376,7 +376,7 @@ export default function BuilderClient() {
                       <input type="text" value={selectedNode.styles.minHeight || ''} onChange={(e) => handleUpdateStyle('minHeight', e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
                       <label className="text-[10px] text-slate-500 mb-1 block">Margin</label>
                       <input type="text" value={selectedNode.styles.margin || ''} onChange={(e) => handleUpdateStyle('margin', e.target.value)} placeholder="0px auto" className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
@@ -394,7 +394,7 @@ export default function BuilderClient() {
                     <div className="h-px bg-slate-800/50" />
                     <div>
                       <h3 className="text-xs font-bold text-slate-400 uppercase mb-3">Flex Layout</h3>
-                      <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                         <div>
                           <label className="text-[10px] text-slate-500 mb-1 block">Direction</label>
                           <select value={selectedNode.styles.flexDirection || 'column'} onChange={(e) => handleUpdateStyle('flexDirection', e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs">
@@ -407,7 +407,7 @@ export default function BuilderClient() {
                           <input type="text" value={selectedNode.styles.gap || ''} onChange={(e) => handleUpdateStyle('gap', e.target.value)} placeholder="20px" className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-[10px] text-slate-500 mb-1 block">Align Items</label>
                           <select value={selectedNode.styles.alignItems || 'flex-start'} onChange={(e) => handleUpdateStyle('alignItems', e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs">
@@ -436,7 +436,7 @@ export default function BuilderClient() {
                 <div>
                   <h3 className="text-xs font-bold text-slate-400 uppercase mb-3">Appearance</h3>
                   {(selectedNode.type === 'text' || selectedNode.type === 'button') && (
-                    <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                       <div>
                         <label className="text-[10px] text-slate-500 mb-1 block">Font Size</label>
                         <input type="text" value={selectedNode.styles.fontSize || ''} onChange={(e) => handleUpdateStyle('fontSize', e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
@@ -457,7 +457,7 @@ export default function BuilderClient() {
                       <label className="text-[10px] text-slate-500 mb-1 block">Background Color</label>
                       <input type="text" value={selectedNode.styles.backgroundColor || ''} onChange={(e) => handleUpdateStyle('backgroundColor', e.target.value)} placeholder="#ffffff or transparent" className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="text-[10px] text-slate-500 mb-1 block">Border Radius</label>
                         <input type="text" value={selectedNode.styles.borderRadius || ''} onChange={(e) => handleUpdateStyle('borderRadius', e.target.value)} placeholder="8px" className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs font-mono" />

@@ -179,7 +179,7 @@ export default function ProviderClientPage({ initialProviders }: { initialProvid
               {/* Template Presets Bar */}
               <div className="mb-6">
                 <span className="text-xs font-bold text-white/50 block mb-2 uppercase tracking-wider">Fast Presets Templates</span>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                   <button 
                     type="button" 
                     onClick={() => applyPreset('ollama')} 

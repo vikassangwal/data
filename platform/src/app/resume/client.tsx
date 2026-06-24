@@ -140,7 +140,7 @@ export default function ResumeClient({ kpis, profile, experience, education, cer
         {/* ─── KPI Summary ─── */}
         <section className="py-12 border-y border-[var(--glass-border)]">
           <Container>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {kpis.map((kpi, i) => (
                 <ScrollReveal key={kpi.label} delay={i * 0.1}>
                   <GlassCard className="text-center hover-glow">

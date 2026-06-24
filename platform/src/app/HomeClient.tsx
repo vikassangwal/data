@@ -252,7 +252,7 @@ export default function HomeClient({
       {/* ═══ STATS STRIP ═══ */}
       <section className="py-16 border-b border-[var(--glass-border)]">
         <Container>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat: any, i: number) => (
               <ScrollReveal key={stat.id} delay={i * 0.1}>
                 <div className="text-center p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--glass-border)] hover:border-primary/30 transition-all duration-300 group">

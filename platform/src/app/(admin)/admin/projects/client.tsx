@@ -199,7 +199,7 @@ export default function ProjectsClient({ initialProjects }: { initialProjects: a
                 <textarea required name="description" rows={3} className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary"></textarea>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">Live URL (Optional)</label>
                   <input name="liveUrl" type="url" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary" />

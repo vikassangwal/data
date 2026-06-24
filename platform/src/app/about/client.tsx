@@ -207,7 +207,7 @@ export default function AboutClient({ settings, stats }: AboutClientProps) {
 
       <section className="py-16 relative" style={{ borderTop: '1px solid var(--glass-border)', borderBottom: '1px solid var(--glass-border)' }}>
         <Container>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {stats.map((s, i) => (
               <AnimatedStat key={s.label} value={s.value + (s.suffix || '')} label={s.label} iconPath={s.icon || ''} delay={i * 0.1} />
             ))}
@@ -282,7 +282,7 @@ export default function AboutClient({ settings, stats }: AboutClientProps) {
           </ScrollReveal>
 
           <ScrollReveal variant="slide-up" delay={0.2}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-12">
               {techStack.map((t, i) => (
                 <div key={t.name} className="group relative">
                   <div
