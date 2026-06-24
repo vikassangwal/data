@@ -932,3 +932,33 @@ model EnterpriseDatabase {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// ------------------------------------------------------
+// 14. AUTOMATED LEAD GEN & SEO AUDIT
+// ------------------------------------------------------
+
+model LeadAudit {
+  id              String   @id @default(cuid())
+  url             String
+  scrapedContent  String?  // Raw text or HTML
+  metaTags        String?  // JSON string
+  seoReport       String?  // JSON structured report
+  status          String   @default("PENDING") // PENDING, SCRAPED, AUDITED, FAILED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  emails          OutreachEmail[]
+}
+
+model OutreachEmail {
+  id              String   @id @default(cuid())
+  auditId         String
+  subject         String
+  body            String
+  targetEmail     String?
+  status          String   @default("DRAFT") // DRAFT, SENT, FAILED
+  sentAt          DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  audit           LeadAudit @relation(fields: [auditId], references: [id], onDelete: Cascade)
+}

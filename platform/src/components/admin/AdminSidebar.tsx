@@ -24,7 +24,8 @@ import {
   Shield,
   Menu,
   X,
-  Plug
+  Plug,
+  Globe
 } from 'lucide-react';
 import { useState } from 'react';
  
@@ -35,6 +36,7 @@ const menuItems = [
   { name: 'Projects', href: '/admin/projects', icon: FolderOpen },
   { name: 'Blog & Comments', href: '/admin/blog', icon: MessageSquare },
   { name: 'Leads & CRM', href: '/admin/leads', icon: Users },
+  { name: 'SEO Lead Gen', href: '/admin/lead-gen', icon: Globe },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart },
   { name: 'ML Pipeline', href: '/admin/ml-pipeline', icon: Brain },
   { name: 'AI Providers', href: '/admin/ai/providers', icon: Cpu },
