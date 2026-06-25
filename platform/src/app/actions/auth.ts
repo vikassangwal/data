@@ -182,6 +182,7 @@ export async function verifySignupOtp(email: string, otp: string) {
 export async function loginUser(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const code = formData.get('code') as string;
 
   if (!email || !password) {
     return { error: 'Email and password are required.' };
@@ -191,18 +192,20 @@ export async function loginUser(formData: FormData) {
     await signIn('credentials', {
       email,
       password,
+      code,
       redirect: false,
     });
     
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return { error: 'Invalid credentials.' };
-        default:
-          return { error: 'Something went wrong.' };
+      if (error.type === 'CredentialsSignin') {
+         if (error.cause?.err?.message === '2FA_REQUIRED') {
+            return { error: '2FA_REQUIRED' };
+         }
+         return { error: 'Invalid credentials.' };
       }
+      return { error: error.message || 'Something went wrong.' };
     }
     
     // Rethrow to allow Next.js redirects to work

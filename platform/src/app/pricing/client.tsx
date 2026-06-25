@@ -106,13 +106,18 @@ function CheckIcon() {
 
 export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tiers: any[]; currentPlanId?: string }) {
   const [isAnnual, setIsAnnual] = useState(false);
+  const [isInternational, setIsInternational] = useState(false);
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const handleCheckout = async (planId: string, amount: number) => {
+  const handleCheckout = async (planId: string, baseAmount: number) => {
     setLoadingTier(planId);
     setFeedback(null);
     try {
+      const currency = isInternational ? 'USD' : 'INR';
+      // Approximate conversion if baseAmount is stored in INR
+      const amount = isInternational ? Math.ceil(baseAmount / 83) : baseAmount;
+
       // 1. Load Razorpay script
       const scriptLoaded = await new Promise((resolve) => {
         const script = document.createElement('script');
@@ -129,14 +134,14 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
       }
 
       // 2. Create Order
-      const response = await fetch('/api/payments/razorpay/create-order', {
+      const response = await fetch('/api/payments/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId, amount, currency: 'INR' })
+        body: JSON.stringify({ planId, amount, currency })
       });
       const data = await response.json();
 
-      if (!data.success) {
+      if (data.error) {
         setFeedback('Error: ' + data.error);
         setLoadingTier(null);
         return;
@@ -144,15 +149,15 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
 
       // 3. Initialize Razorpay Checkout
       const options = {
-        key: data.key,
-        amount: data.amount,
-        currency: 'INR',
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '', // Make sure this env var is public
+        amount: data.order.amount,
+        currency: data.order.currency,
         name: 'Platform Access',
         description: `Upgrade to ${planId} Plan`,
-        order_id: data.orderId,
+        order_id: data.order.id,
         handler: async function (response: any) {
           setFeedback('Verifying payment...');
-          const verifyRes = await fetch('/api/payments/razorpay/verify', {
+          const verifyRes = await fetch('/api/payments/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -231,47 +236,71 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
         </Container>
       </section>
 
-      {/* ═══════════════════ BILLING TOGGLE ═══════════════════ */}
+      {/* ═══════════════════ BILLING & CURRENCY TOGGLES ═══════════════════ */}
       <section className="relative z-10 -mt-8 mb-4">
         <Container>
-          <ScrollReveal>
-            <div className="flex items-center justify-center gap-4">
-              <span
-                className={`text-sm font-semibold transition-colors duration-300 ${
-                  !isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
-                }`}
-              >
-                Monthly
-              </span>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+            {/* Annual Toggle */}
+            <ScrollReveal>
+              <div className="flex items-center justify-center gap-4">
+                <span
+                  className={\`text-sm font-semibold transition-colors duration-300 \${
+                    !isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
+                  }\`}
+                >
+                  Monthly
+                </span>
 
-              <button
-                onClick={() => setIsAnnual(!isAnnual)}
-                className={`relative w-16 h-8 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6] ${
-                  isAnnual
-                    ? 'bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6]'
-                    : 'bg-[var(--bg-secondary)]'
-                }`}
-                aria-label="Toggle annual billing"
-              >
-                <motion.div
-                  className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-lg"
-                  animate={{ x: isAnnual ? 32 : 4 }}
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                />
-              </button>
+                <button
+                  onClick={() => setIsAnnual(!isAnnual)}
+                  className={\`relative w-16 h-8 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none \${
+                    isAnnual
+                      ? 'bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6]'
+                      : 'bg-[var(--bg-secondary)]'
+                  }\`}
+                >
+                  <motion.div
+                    className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-lg"
+                    animate={{ x: isAnnual ? 32 : 4 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                </button>
 
-              <span
-                className={`text-sm font-semibold transition-colors duration-300 flex items-center gap-2 ${
-                  isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
-                }`}
-              >
-                Annual
-                <Badge variant="primary" className="text-xs !py-0.5 !px-2 animate-pulse-glow">
-                  Save 20%
-                </Badge>
-              </span>
-            </div>
-          </ScrollReveal>
+                <span
+                  className={\`text-sm font-semibold transition-colors duration-300 flex items-center gap-2 \${
+                    isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
+                  }\`}
+                >
+                  Annual
+                  <Badge variant="primary" className="text-xs !py-0.5 !px-2 animate-pulse-glow">
+                    Save 20%
+                  </Badge>
+                </span>
+              </div>
+            </ScrollReveal>
+
+            {/* Currency Toggle */}
+            <ScrollReveal delay={0.1}>
+              <div className="flex items-center justify-center gap-4 bg-slate-900/50 p-2 border border-slate-800 rounded-full">
+                <button
+                  onClick={() => setIsInternational(false)}
+                  className={\`px-4 py-1.5 rounded-full text-sm font-bold transition-all \${
+                    !isInternational ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  }\`}
+                >
+                  National (INR)
+                </button>
+                <button
+                  onClick={() => setIsInternational(true)}
+                  className={\`px-4 py-1.5 rounded-full text-sm font-bold transition-all \${
+                    isInternational ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  }\`}
+                >
+                  International (USD)
+                </button>
+              </div>
+            </ScrollReveal>
+          </div>
         </Container>
       </section>
 

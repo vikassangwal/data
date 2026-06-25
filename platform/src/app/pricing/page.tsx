@@ -38,32 +38,18 @@ function getIconForType(iconType: string) {
 }
 
 export default async function PricingPage() {
-  const [session, plansResult] = await Promise.all([
+  const [session, plans] = await Promise.all([
     auth(),
     getPricingPlans()
   ]);
 
-  const { success, data: plans, error } = plansResult;
   const currentPlanId = session?.user?.planId || 'trial';
-
-  if (!success) {
-    return (
-      <div className="p-8 text-center text-red-500 pt-32">
-        <h2 className="text-xl font-bold mb-2">Error loading pricing plans</h2>
-        <p>{error}</p>
-      </div>
-    );
-  }
 
   // Map DB structure to UI structure
   const formattedTiers = (plans || []).map((plan: any) => {
-    // Strip non-numeric symbols like $ and /mo to prevent NaN
-    const cleanPriceStr = (plan.price || '').replace(/[^0-9.]/g, '');
-    const basePrice = parseFloat(cleanPriceStr) || plan.basePrice || 0;
-    const discount = plan.discount || 0;
-    const annualPrice = discount > 0 
-      ? Math.floor(basePrice * (1 - discount / 100)) 
-      : Math.floor(basePrice * 0.8); // fallback to 20% default if no DB discount set
+    const basePrice = plan.basePrice || 0;
+    const discount = plan.discount || 20;
+    const annualPrice = Math.floor(basePrice * (1 - discount / 100));
     
     return {
       id: plan.id,
@@ -71,11 +57,13 @@ export default async function PricingPage() {
       monthly: basePrice,
       annual: annualPrice,
       discount: discount,
-      desc: `Everything you need for ${plan.name.toLowerCase()} operations.`,
+      desc: plan.name.includes('Enterprise') ? 'Unlimited features for massive scale.' : `Everything you need for ${plan.name.toLowerCase()} operations.`,
       features: [
-        ...(plan.planFeatures?.map((pf: any) => pf.feature?.name).filter(Boolean) || []),
-        ...(plan.features?.map((f: any) => f.title) || [])
-      ],
+        'Dedicated Dashboard',
+        'Email Support',
+        'API Access',
+        'Custom Integrations'
+      ], // We can expand this with DB features later
       cta: "Upgrade Plan",
       ctaVariant: plan.isPopular ? "primary" : "outline",
       popular: plan.isPopular,

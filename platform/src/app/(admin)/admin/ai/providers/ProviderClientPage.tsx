@@ -75,7 +75,7 @@ export default function ProviderClientPage({ initialProviders }: { initialProvid
   };
 
   // Preset Configurations for Local / Custom APIs
-  const applyPreset = (preset: 'ollama' | 'lmstudio' | 'huggingface' | 'together') => {
+  const applyPreset = (preset: 'ollama' | 'lmstudio' | 'huggingface' | 'together' | 'openrouter') => {
     switch (preset) {
       case 'ollama':
         setFormData({
@@ -116,6 +116,16 @@ export default function ProviderClientPage({ initialProviders }: { initialProvid
           models: 'meta-llama/Llama-3-70b-chat-hf, mistralai/Mixtral-8x7B-Instruct-v0.1'
         });
         triggerAlert('Together AI endpoint template loaded.');
+        break;
+      case 'openrouter':
+        setFormData({
+          name: 'OpenRouter AI',
+          type: 'openai_compatible',
+          apiKey: '',
+          baseUrl: 'https://openrouter.ai/api/v1',
+          models: 'meta-llama/llama-3-8b-instruct:free, google/gemma-7b-it:free'
+        });
+        triggerAlert('OpenRouter AI endpoint template loaded.');
         break;
     }
   };
@@ -179,7 +189,7 @@ export default function ProviderClientPage({ initialProviders }: { initialProvid
               {/* Template Presets Bar */}
               <div className="mb-6">
                 <span className="text-xs font-bold text-white/50 block mb-2 uppercase tracking-wider">Fast Presets Templates</span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                   <button 
                     type="button" 
                     onClick={() => applyPreset('ollama')} 
@@ -211,6 +221,14 @@ export default function ProviderClientPage({ initialProviders }: { initialProvid
                   >
                     <span className="font-bold text-sm text-white">Together AI</span>
                     <span className="text-xs text-muted-foreground mt-1">Cloud API Endpoint</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => applyPreset('openrouter')} 
+                    className="p-3 bg-white/5 hover:bg-primary/10 border border-white/10 hover:border-primary/50 text-left rounded-xl transition-all flex flex-col justify-between"
+                  >
+                    <span className="font-bold text-sm text-white">OpenRouter</span>
+                    <span className="text-xs text-muted-foreground mt-1">Free/Paid Models</span>
                   </button>
                 </div>
               </div>

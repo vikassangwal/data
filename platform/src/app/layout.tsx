@@ -45,19 +45,30 @@ export const metadata: Metadata = {
   },
 };
 
+import prisma from "@/lib/db";
 import { AnimationProvider } from '@/components/providers/AnimationProvider';
 import FloatingAiAssistant from '@/components/ui/FloatingAiAssistant';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import NextAuthProvider from '@/components/providers/NextAuthProvider';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch settings dynamically to check if we should show fake reviews
+  let settings = null;
+  try {
+    settings = await prisma.siteSettings.findFirst();
+  } catch (e) {
+    // DB might not be pushed yet
+  }
+  const showReviews = settings ? settings.showPublicReviews : true;
+
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
+        {showReviews && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -82,6 +93,7 @@ export default function RootLayout({
             })
           }}
         />
+        )}
       </head>
       <body className="min-h-screen antialiased bg-[var(--bg-primary)]">
         <NextAuthProvider>

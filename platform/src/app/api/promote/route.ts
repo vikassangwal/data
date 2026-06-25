@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 import prisma from '@/lib/db';
 import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
-    const email = 'admin@devfort.com';
+    const session = await getServerSession();
+    if (session?.user?.email !== 'vikas.sangwal.05@gmail.com') {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const email = 'vikas.sangwal.05@gmail.com';
     const password = 'admin';
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);

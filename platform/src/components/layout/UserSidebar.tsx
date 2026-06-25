@@ -21,7 +21,8 @@ import {
   Users,
   Shield,
   Workflow,
-  LayoutTemplate
+  LayoutTemplate,
+  CreditCard
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
@@ -40,6 +41,7 @@ const menuItems = [
   { name: 'Email Library', href: '/dashboard/emails', icon: Mail },
   { name: 'Advanced', href: '/dashboard/advanced', icon: Sliders },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+  { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
   { name: 'Profile', href: '/dashboard/settings/profile', icon: User },
 ];
 

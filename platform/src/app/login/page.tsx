@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [mode, setMode] = useState<'login' | 'forgot-password' | 'forgot-id' | 'verify-otp' | 'reset-password'>('login');
+  const [mode, setMode] = useState<'login' | 'forgot-password' | 'forgot-id' | 'verify-otp' | 'reset-password' | 'verify-2fa'>('login');
   
   // Recovery form states
   const [recoveryEmail, setRecoveryEmail] = useState('');
@@ -21,6 +21,10 @@ export default function LoginPage() {
   const [newPassword, setNewPassword] = useState('');
   const [resetToken, setResetToken] = useState('');
   const [simulatedOtp, setSimulatedOtp] = useState('');
+
+  // 2FA Auth State
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
  
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,10 +33,21 @@ export default function LoginPage() {
     setSuccess('');
  
     const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    
     const result = await loginUser(formData);
  
     if (result && result.error) {
-      setError(result.error);
+      if (result.error === '2FA_REQUIRED') {
+        setAuthEmail(email);
+        setAuthPassword(password);
+        setMode('verify-2fa');
+        setError('');
+        setSuccess('Two-Factor Authentication required.');
+      } else {
+        setError(result.error);
+      }
       setLoading(false);
     } else {
       router.push('/lab'); // Redirect to Data Lab after login
@@ -281,7 +296,72 @@ export default function LoginPage() {
                     <GitBranch className="w-4 h-4" />
                     GitHub
                   </button>
+                  <button 
+                    onClick={() => {
+                      const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
+                      if (!emailInput?.value) {
+                         setError('Please enter your email first to use Magic Link.');
+                         return;
+                      }
+                      setLoading(true);
+                      setError('');
+                      // In a real app, import signIn from next-auth/react
+                      // await signIn('nodemailer', { email: emailInput.value, redirect: false });
+                      setSuccess('Magic Link sent to your email (simulated for now)!');
+                      setLoading(false);
+                    }}
+                    type="button"
+                    className="w-full flex items-center justify-center gap-2 bg-background border border-border hover:bg-muted text-foreground py-2.5 px-4 rounded-xl transition-all font-medium text-xs cursor-pointer mt-3"
+                  >
+                    <Mail className="w-4 h-4 text-emerald-400" />
+                    Sign in with Magic Link
+                  </button>
                 </div>
+              </motion.div>
+            )}
+
+            {/* 1.5. 2FA VERIFICATION VIEW */}
+            {mode === 'verify-2fa' && (
+              <motion.div
+                key="verify-2fa"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+              >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <input type="hidden" name="email" value={authEmail} />
+                  <input type="hidden" name="password" value={authPassword} />
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium text-foreground ml-1">Authenticator App Code</label>
+                    <div className="relative">
+                      <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                      <input 
+                        type="text" 
+                        name="code"
+                        maxLength={6}
+                        required
+                        placeholder="123456"
+                        className="w-full bg-background border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all tracking-widest text-center font-bold text-lg"
+                      />
+                    </div>
+                  </div>
+ 
+                  <button 
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 cursor-pointer"
+                  >
+                    {loading ? 'Verifying...' : 'Verify & Login'}
+                  </button>
+ 
+                  <button 
+                    type="button"
+                    onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
+                    className="w-full bg-transparent border border-dashed border-border text-muted-foreground hover:text-white py-2.5 rounded-xl text-xs transition-all font-semibold cursor-pointer"
+                  >
+                    Back to Login
+                  </button>
+                </form>
               </motion.div>
             )}
  

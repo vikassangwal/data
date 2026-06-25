@@ -45,6 +45,8 @@ model User {
   newEmailRequest       String?
   signupOtp             String?
   signupOtpExpires      DateTime?
+  twoFactorSecret       String?
+  twoFactorEnabled      Boolean   @default(false)
 
   accounts      Account[]
   sessions      Session[]
@@ -268,6 +270,7 @@ model SiteSettings {
   id              String   @id @default(cuid())
   siteName        String   @default("My Platform")
   maintenanceMode Boolean  @default(false)
+  showPublicReviews Boolean @default(true)
   theme           String   @default("dark")
   contactEmail    String?
   seoTitle        String?
