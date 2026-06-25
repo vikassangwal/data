@@ -79,7 +79,7 @@ export async function registerUser(formData: FormData) {
       return { error: 'Username is already taken.' };
     }
 
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(8);
     const passwordHash = await bcrypt.hash(password, salt);
 
     // Calculate standard 7-Day Free Trial expiration date
@@ -296,7 +296,7 @@ export async function resetPassword(token: string, newPasswordStr: string) {
       return { error: 'OTP verification is required before resetting password.' };
     }
 
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(8);
     const passwordHash = await bcrypt.hash(newPasswordStr, salt);
 
     await prisma.user.update({
