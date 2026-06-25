@@ -1,11 +1,11 @@
 'use server';
 
 import prisma from '@/lib/db';
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 export async function getSiteSettings() {
-  const session = await getServerSession();
+  const session = await auth();
   if (session?.user?.role !== 'SUPER-ADMIN' && session?.user?.role !== 'ADMIN') {
     throw new Error('Unauthorized');
   }
@@ -22,7 +22,7 @@ export async function getSiteSettings() {
 }
 
 export async function togglePublicReviews(currentState: boolean) {
-  const session = await getServerSession();
+  const session = await auth();
   if (session?.user?.role !== 'SUPER-ADMIN' && session?.user?.role !== 'ADMIN') {
     throw new Error('Unauthorized');
   }

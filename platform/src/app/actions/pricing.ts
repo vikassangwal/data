@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/db';
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 export async function getPricingPlans() {
@@ -16,7 +16,7 @@ export async function getPricingPlans() {
 }
 
 export async function updatePricingPlan(id: string, data: any) {
-  const session = await getServerSession();
+  const session = await auth();
   if (session?.user?.role !== 'SUPER-ADMIN' && session?.user?.role !== 'ADMIN') {
     throw new Error('Unauthorized');
   }
