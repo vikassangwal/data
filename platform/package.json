@@ -68,5 +68,9 @@
     "tailwindcss": "^4",
     "ts-jest": "^29.2.5",
     "typescript": "^5"
+  },
+  "overrides": {
+    "nodemailer": "^7.0.13",
+    "next-auth": "$next-auth"
   }
 }
