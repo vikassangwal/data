@@ -52,11 +52,11 @@ export default function AdminSettingsPage() {
           
           <button 
             onClick={handleToggle}
-            className={\`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all \${
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
               settings?.showPublicReviews 
                 ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/50' 
                 : 'bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/50'
-            }\`}
+            }`}
           >
             {settings?.showPublicReviews ? <Eye size={20} /> : <EyeOff size={20} />}
             {settings?.showPublicReviews ? 'Public (Visible)' : 'Hidden'}

@@ -244,20 +244,20 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
             <ScrollReveal>
               <div className="flex items-center justify-center gap-4">
                 <span
-                  className={\`text-sm font-semibold transition-colors duration-300 \${
+                  className={`text-sm font-semibold transition-colors duration-300 ${
                     !isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
-                  }\`}
+                  }`}
                 >
                   Monthly
                 </span>
 
                 <button
                   onClick={() => setIsAnnual(!isAnnual)}
-                  className={\`relative w-16 h-8 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none \${
+                  className={`relative w-16 h-8 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
                     isAnnual
                       ? 'bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6]'
                       : 'bg-[var(--bg-secondary)]'
-                  }\`}
+                  }`}
                 >
                   <motion.div
                     className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-lg"
@@ -267,9 +267,9 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
                 </button>
 
                 <span
-                  className={\`text-sm font-semibold transition-colors duration-300 flex items-center gap-2 \${
+                  className={`text-sm font-semibold transition-colors duration-300 flex items-center gap-2 ${
                     isAnnual ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
-                  }\`}
+                  }`}
                 >
                   Annual
                   <Badge variant="primary" className="text-xs !py-0.5 !px-2 animate-pulse-glow">
@@ -284,17 +284,17 @@ export default function PricingClient({ tiers, currentPlanId = 'trial' }: { tier
               <div className="flex items-center justify-center gap-4 bg-slate-900/50 p-2 border border-slate-800 rounded-full">
                 <button
                   onClick={() => setIsInternational(false)}
-                  className={\`px-4 py-1.5 rounded-full text-sm font-bold transition-all \${
+                  className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
                     !isInternational ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white'
-                  }\`}
+                  }`}
                 >
                   National (INR)
                 </button>
                 <button
                   onClick={() => setIsInternational(true)}
-                  className={\`px-4 py-1.5 rounded-full text-sm font-bold transition-all \${
+                  className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
                     isInternational ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-white'
-                  }\`}
+                  }`}
                 >
                   International (USD)
                 </button>
