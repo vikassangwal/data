@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Shield, ShieldAlert, CheckCircle2, User as UserIcon, Mail } from 'lucide-react';
+import { Shield, ShieldAlert, CheckCircle2, User as UserIcon, Mail, Key, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 
 export default function SecurityProfile() {
