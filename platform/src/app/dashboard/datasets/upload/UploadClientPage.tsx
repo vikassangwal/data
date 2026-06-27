@@ -97,7 +97,7 @@ export default function UploadClientPage() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-          <button className="p-6 bg-slate-950 border border-slate-800 hover:border-indigo-500 rounded-xl transition-all group flex flex-col items-center text-center gap-3">
+          <button onClick={() => router.push('/dashboard/builder')} className="p-6 bg-slate-950 border border-slate-800 hover:border-indigo-500 rounded-xl transition-all group flex flex-col items-center text-center gap-3">
             <BrainCircuit className="w-8 h-8 text-indigo-400 group-hover:scale-110 transition-transform" />
             <div>
               <h3 className="font-bold text-white">Train AI / RAG</h3>
