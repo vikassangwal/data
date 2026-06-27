@@ -1,7 +1,7 @@
 import { getBlogPosts } from '@/app/actions/blog';
 import BlogClient from './client';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function BlogPage() {
   const { success, data: posts, error } = await getBlogPosts();

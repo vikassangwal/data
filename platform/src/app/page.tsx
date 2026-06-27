@@ -8,6 +8,8 @@ import {
 import prisma from '@/lib/db';
 import HomeClient from './HomeClient';
 
+export const revalidate = 3600; // Cache page for 1 hour for extreme speed
+
 export default async function HomePage() {
   // Fetch all CMS data in parallel
   const [

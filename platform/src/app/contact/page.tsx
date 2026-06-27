@@ -1,7 +1,7 @@
 import ContactClient from './client';
 import { getContactSettings } from '@/app/actions/cms-editors';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function ContactPage() {
   const settings = await getContactSettings();

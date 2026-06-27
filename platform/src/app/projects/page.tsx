@@ -1,7 +1,7 @@
 import { getProjects } from '@/app/actions/projects';
 import ProjectsClient from './client';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function ProjectsPage() {
   const { success, data: projects, error } = await getProjects();
