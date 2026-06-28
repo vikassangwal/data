@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
 import Button from '@/components/ui/Button';
