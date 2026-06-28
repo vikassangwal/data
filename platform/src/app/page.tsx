@@ -25,7 +25,7 @@ export default async function HomePage() {
     getTestimonials(),
     getSkills(),
     getTimelineEvents(),
-    prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' }, take: 3 })
+    prisma.service.findMany({ where: { isActive: true }, orderBy: { order: 'asc' }, take: 3 }).catch(() => [])
   ]);
 
   return (

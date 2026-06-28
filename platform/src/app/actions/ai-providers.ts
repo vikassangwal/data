@@ -4,9 +4,14 @@ import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export async function getAiProviders() {
-  return await prisma.aiProvider.findMany({
-    orderBy: { createdAt: 'desc' }
-  });
+  try {
+    return await prisma.aiProvider.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch (error) {
+    console.error('Error fetching AI providers:', error);
+    return [];
+  }
 }
 
 export async function addAiProvider(data: any) {
