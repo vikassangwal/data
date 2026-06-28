@@ -2,7 +2,7 @@ import PricingClient from './client';
 import { getPricingPlans } from '@/app/actions/pricing';
 import { auth } from '@/auth';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 function getIconForType(iconType: string) {
   switch (iconType) {

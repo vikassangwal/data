@@ -7,21 +7,28 @@ export const metadata: Metadata = {
   description: 'Advanced AI/ML tools: Automated Insights, Predictive Analytics, Natural Language Queries, Model Training, AI Agents, and Data Cleaning.',
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function AIToolsPage() {
-  // Fetch available datasets
-  const datasets = await prisma.adminDataset.findMany({
-    where: { status: 'ready' },
-    orderBy: { updatedAt: 'desc' },
-    include: { files: { select: { id: true, fileName: true, fileType: true } } }
-  });
+  let datasets: any[] = [];
+  let models: any[] = [];
 
-  // Fetch trained models
-  const models = await prisma.trainedModel.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 20
-  });
+  try {
+    // Fetch available datasets
+    datasets = await prisma.adminDataset.findMany({
+      where: { status: 'ready' },
+      orderBy: { updatedAt: 'desc' },
+      include: { files: { select: { id: true, fileName: true, fileType: true } } }
+    });
+
+    // Fetch trained models
+    models = await prisma.trainedModel.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    });
+  } catch (error) {
+    console.error('Error fetching data for AI Tools page:', error);
+  }
 
   return (
     <AIToolsClient

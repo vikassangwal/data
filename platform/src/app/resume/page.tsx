@@ -2,7 +2,7 @@ import ResumeClient from './client';
 import { getResumeEntries, getResumeProfile } from '@/app/actions/resume';
 import { getStats } from '@/app/actions/homepage-cms';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function ResumePage() {
   const [resumeRes, profileRes, stats] = await Promise.all([
